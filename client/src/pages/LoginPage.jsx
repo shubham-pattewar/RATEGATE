@@ -28,53 +28,57 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-950 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4 py-12 transition-colors">
       <div className="w-full max-w-sm">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-brand-600 mb-3">
-            <Zap className="h-5 w-5 text-white" strokeWidth={2.5} />
+        {/* Logo & Heading */}
+        <div className="flex flex-col items-center mb-6 text-center">
+          <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-xs mb-3.5">
+            <Zap className="h-5 w-5 text-emerald-500 fill-emerald-500/20" strokeWidth={2.2} />
           </div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Welcome back</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Sign in to your RateGate account</p>
+          <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Welcome back</h1>
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Sign in to manage your RateGate endpoints</p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          <Input
-            id="login-email"
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            autoComplete="email"
-            required
-          />
-          <Input
-            id="login-password"
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            autoComplete="current-password"
-            required
-          />
+        {/* Card Form */}
+        <div className="bg-white dark:bg-zinc-900/90 border border-zinc-200/90 dark:border-zinc-800/80 rounded-2xl p-6 shadow-xs">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <Input
+              id="login-email"
+              label="Email address"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="developer@example.com"
+              autoComplete="email"
+              required
+            />
+            <Input
+              id="login-password"
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              autoComplete="current-password"
+              required
+            />
 
-          {error && (
-            <p className="text-sm text-red-600 dark:text-red-400" role="alert">{error}</p>
-          )}
+            {error && (
+              <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-xs text-rose-600 dark:text-rose-400" role="alert">
+                {error}
+              </div>
+            )}
 
-          <Button type="submit" className="w-full" disabled={loading} id="btn-login">
-            {loading ? 'Signing in…' : 'Sign in'}
-          </Button>
-        </form>
+            <Button type="submit" className="w-full mt-1" disabled={loading} id="btn-login">
+              {loading ? 'Authenticating…' : 'Sign in'}
+            </Button>
+          </form>
+        </div>
 
-        <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-5 text-center text-xs text-zinc-500 dark:text-zinc-400">
           Don&apos;t have an account?{' '}
-          <Link to="/signup" className="text-brand-600 hover:text-brand-700 font-medium">
-            Sign up
+          <Link to="/signup" className="text-zinc-900 dark:text-zinc-100 underline underline-offset-4 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
+            Create an account
           </Link>
         </p>
       </div>

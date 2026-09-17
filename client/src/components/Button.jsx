@@ -1,10 +1,10 @@
 import { clsx } from 'clsx';
 
 const variants = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 focus-visible:ring-brand-500',
-  secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 focus-visible:ring-gray-400',
-  danger: 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500',
-  ghost: 'bg-transparent text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 focus-visible:ring-gray-400',
+  primary: 'bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white shadow-xs focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 font-medium active:scale-[0.98]',
+  secondary: 'bg-white text-zinc-900 border border-zinc-200/90 hover:bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-800 dark:hover:bg-zinc-800/80 dark:hover:border-zinc-700 shadow-xs focus-visible:ring-zinc-400 active:scale-[0.98]',
+  danger: 'bg-rose-600 text-white hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-500 shadow-xs focus-visible:ring-rose-500 active:scale-[0.98]',
+  ghost: 'bg-transparent text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 focus-visible:ring-zinc-400',
 };
 
 const sizes = {

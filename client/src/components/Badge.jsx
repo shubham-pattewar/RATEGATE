@@ -1,11 +1,11 @@
 import { clsx } from 'clsx';
 
 const colors = {
-  green:  'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-  red:    'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-  yellow: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-  blue:   'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-  gray:   'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+  green:  'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20',
+  red:    'bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20',
+  yellow: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20',
+  blue:   'bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-500/20',
+  gray:   'bg-zinc-100 text-zinc-700 dark:bg-zinc-800/80 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700/60',
 };
 
 export function Badge({ color = 'gray', className, children }) {

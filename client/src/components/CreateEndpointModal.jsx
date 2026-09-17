@@ -70,12 +70,12 @@ export function CreateEndpointModal({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 dark:bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-lg bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800">
-          <h2 className="text-base font-semibold text-gray-900 dark:text-white">Register new endpoint</h2>
-          <button onClick={onClose} className="rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" id="btn-close-modal">
-            <X className="h-4 w-4 text-gray-500" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-xs">
+      <div className="w-full max-w-lg bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-200/90 dark:border-zinc-800">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100 dark:border-zinc-800/80">
+          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Register new endpoint</h2>
+          <button onClick={onClose} className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors" id="btn-close-modal">
+            <X className="h-4 w-4" />
           </button>
         </div>
 
@@ -93,15 +93,15 @@ export function CreateEndpointModal({ onClose }) {
               onChange={set('limit')}
               error={fieldErrors['rateLimit.limit']}
             />
-            <div className="space-y-1">
-              <label htmlFor="ep-window" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <div className="space-y-1.5">
+              <label htmlFor="ep-window" className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
                 Window (ms)
               </label>
               <select
                 id="ep-window"
                 value={form.windowMs}
                 onChange={set('windowMs')}
-                className="block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="block w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400"
               >
                 <option value="1000">1 second</option>
                 <option value="10000">10 seconds</option>
@@ -113,11 +113,11 @@ export function CreateEndpointModal({ onClose }) {
             </div>
           </div>
 
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Algorithm: <strong>Sliding window log</strong> — exact count of requests in the last <em>window</em> ms per client.
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            Algorithm: <strong className="text-zinc-700 dark:text-zinc-300">Sliding window log</strong> — exact quota evaluation in the last rolling window.
           </p>
 
-          {serverError && <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>}
+          {serverError && <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">{serverError}</p>}
 
           <div className="flex gap-3 pt-1">
             <Button type="button" variant="secondary" onClick={onClose} className="flex-1" id="btn-cancel-create">Cancel</Button>

@@ -4,7 +4,7 @@ export function Card({ className, children, ...props }) {
   return (
     <div
       className={clsx(
-        'rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900',
+        'rounded-xl border border-zinc-200/90 bg-white dark:border-zinc-800/80 dark:bg-zinc-900 shadow-xs dark:shadow-none transition-colors duration-200',
         className,
       )}
       {...props}
@@ -16,7 +16,7 @@ export function Card({ className, children, ...props }) {
 
 export function CardHeader({ className, children }) {
   return (
-    <div className={clsx('flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800', className)}>
+    <div className={clsx('flex items-center justify-between px-6 py-4 border-b border-zinc-100 dark:border-zinc-800/80', className)}>
       {children}
     </div>
   );

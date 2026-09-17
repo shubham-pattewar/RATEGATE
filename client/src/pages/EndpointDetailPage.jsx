@@ -45,16 +45,16 @@ const RANGES = [
 // ---------------------------------------------------------------------------
 function StatCard({ label, value, sub, color = 'gray' }) {
   const colorMap = {
-    gray:  'text-gray-900 dark:text-white',
-    green: 'text-green-700 dark:text-green-400',
-    red:   'text-red-700 dark:text-red-400',
-    blue:  'text-blue-700 dark:text-blue-400',
+    gray:  'text-zinc-900 dark:text-zinc-100',
+    green: 'text-emerald-600 dark:text-emerald-400',
+    red:   'text-rose-600 dark:text-rose-400',
+    blue:  'text-zinc-900 dark:text-zinc-100',
   };
   return (
     <Card className="p-4">
-      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{label}</p>
-      <p className={`mt-1 text-2xl font-semibold tabular-nums ${colorMap[color]}`}>{value}</p>
-      {sub && <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{sub}</p>}
+      <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">{label}</p>
+      <p className={`mt-1.5 text-2xl font-semibold tabular-nums tracking-tight ${colorMap[color]}`}>{value}</p>
+      {sub && <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">{sub}</p>}
     </Card>
   );
 }
@@ -91,11 +91,13 @@ function SettingsPanel({ endpoint, onClose }) {
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   return (
-    <Card className="mt-6">
+    <Card className="mt-6 border-zinc-200/90 dark:border-zinc-800">
       <CardHeader>
-        <span className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2"><Settings className="h-4 w-4" /> Endpoint settings</span>
-        <button onClick={onClose} className="rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800" id="btn-close-settings">
-          <X className="h-4 w-4 text-gray-400" />
+        <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-2">
+          <Settings className="h-4 w-4 text-zinc-400" /> Endpoint configuration
+        </span>
+        <button onClick={onClose} className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors" id="btn-close-settings">
+          <X className="h-4 w-4" />
         </button>
       </CardHeader>
       <CardBody className="space-y-4">
@@ -103,13 +105,13 @@ function SettingsPanel({ endpoint, onClose }) {
           <Input id="set-name" label="Name" value={form.name} onChange={set('name')} />
           <Input id="set-url" label="Target URL" value={form.targetUrl} onChange={set('targetUrl')} />
           <Input id="set-limit" label="Max requests" type="number" min="1" value={form.limit} onChange={set('limit')} />
-          <div className="space-y-1">
-            <label htmlFor="set-window" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Window (ms)</label>
+          <div className="space-y-1.5">
+            <label htmlFor="set-window" className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">Window (ms)</label>
             <select
               id="set-window"
               value={form.windowMs}
               onChange={set('windowMs')}
-              className="block w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="block w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400"
             >
               <option value="1000">1 second</option>
               <option value="10000">10 seconds</option>
@@ -121,20 +123,20 @@ function SettingsPanel({ endpoint, onClose }) {
           </div>
         </div>
 
-        <label className="flex items-center gap-2 cursor-pointer">
+        <label className="flex items-center gap-2.5 cursor-pointer select-none">
           <input
             id="set-active"
             type="checkbox"
             checked={form.isActive}
             onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked }))}
-            className="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+            className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-700 text-emerald-600 focus:ring-emerald-500/20"
           />
-          <span className="text-sm text-gray-700 dark:text-gray-300">Endpoint active</span>
+          <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Endpoint active</span>
         </label>
 
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        {error && <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">{error}</p>}
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 pt-1">
           <Button variant="secondary" onClick={onClose} id="btn-cancel-settings">Cancel</Button>
           <Button onClick={() => mutation.mutate()} disabled={mutation.isPending} id="btn-save-settings">
             <Save className="h-4 w-4" />
@@ -198,20 +200,20 @@ export function EndpointDetailPage() {
     <Layout>
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 mb-6">
-        <Link to="/" className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center gap-1">
+        <Link to="/" className="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center gap-1">
           <ArrowLeft className="h-3.5 w-3.5" /> Endpoints
         </Link>
-        <span className="text-gray-300 dark:text-gray-600">/</span>
-        <span className="text-sm font-medium text-gray-900 dark:text-white">{endpoint.name}</span>
+        <span className="text-zinc-300 dark:text-zinc-600">/</span>
+        <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">{endpoint.name}</span>
         <Badge color={endpoint.isActive ? 'green' : 'gray'} className="ml-1">{endpoint.isActive ? 'Active' : 'Inactive'}</Badge>
       </div>
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start gap-4 mb-6">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">{endpoint.name}</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 font-mono mt-0.5 truncate">{endpoint.targetUrl}</p>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+          <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{endpoint.name}</h1>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono mt-0.5 truncate">{endpoint.targetUrl}</p>
+          <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">
             {endpoint.rateLimit.limit} req / {windowLabel(endpoint.rateLimit.windowMs)} · Sliding window
           </p>
         </div>
@@ -224,11 +226,11 @@ export function EndpointDetailPage() {
       {showSettings && <SettingsPanel endpoint={endpoint} onClose={() => setShowSettings(false)} />}
 
       {/* Proxy URL */}
-      <Card className="mb-6 bg-gray-50 dark:bg-gray-900/50">
+      <Card className="mb-6 bg-zinc-50 dark:bg-zinc-900/60 border-zinc-200/90 dark:border-zinc-800">
         <CardBody className="py-3">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Proxy URL:{' '}
-            <code className="font-mono text-xs text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700">
+          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            Proxy Gateway URL:{' '}
+            <code className="font-mono text-xs text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-700/80 shadow-2xs select-all">
               {import.meta.env.VITE_API_URL || window.location.origin}/proxy/{id}
             </code>
           </p>
@@ -237,17 +239,17 @@ export function EndpointDetailPage() {
 
       {/* Range selector */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-medium text-gray-900 dark:text-white">Traffic analytics</h2>
-        <div className="flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">Traffic analytics</h2>
+        <div className="flex rounded-lg bg-zinc-100 dark:bg-zinc-800/80 p-0.5 border border-zinc-200/60 dark:border-zinc-700/60">
           {RANGES.map((r) => (
             <button
               key={r.value}
               onClick={() => setRange(r.value)}
               id={`btn-range-${r.value}`}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
                 range === r.value
-                  ? 'bg-brand-600 text-white'
-                  : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs'
+                  : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
               }`}
             >
               {r.label}
@@ -270,36 +272,36 @@ export function EndpointDetailPage() {
       {/* Volume chart */}
       <Card className="mb-6">
         <CardHeader>
-          <span className="text-sm font-medium text-gray-900 dark:text-white">Request volume</span>
+          <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Request volume</span>
         </CardHeader>
         <CardBody>
           {statsLoading ? (
-            <div className="h-48 flex items-center justify-center text-sm text-gray-400">Loading…</div>
+            <div className="h-48 flex items-center justify-center text-xs text-zinc-400">Loading metrics…</div>
           ) : chartData.length === 0 ? (
-            <div className="h-48 flex items-center justify-center text-sm text-gray-400">No data for this period.</div>
+            <div className="h-48 flex items-center justify-center text-xs text-zinc-400">No traffic recorded for this window.</div>
           ) : (
             <ResponsiveContainer width="100%" height={240}>
               <AreaChart data={chartData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="gradAllowed" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="gradBlocked" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-gray-100 dark:text-gray-800" />
+                <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-zinc-100 dark:text-zinc-800/80" />
                 <XAxis dataKey="time" tick={{ fontSize: 11 }} tickLine={false} axisLine={false} />
                 <YAxis allowDecimals={false} tick={{ fontSize: 11 }} tickLine={false} axisLine={false} />
                 <Tooltip
-                  contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e5e7eb' }}
+                  contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #3f3f46', backgroundColor: '#18181b', color: '#f4f4f5' }}
                   itemStyle={{ padding: '1px 0' }}
                 />
                 <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                <Area type="monotone" dataKey="Allowed" stroke="#22c55e" strokeWidth={2} fill="url(#gradAllowed)" />
-                <Area type="monotone" dataKey="Blocked" stroke="#ef4444" strokeWidth={2} fill="url(#gradBlocked)" />
+                <Area type="monotone" dataKey="Allowed" stroke="#10b981" strokeWidth={2} fill="url(#gradAllowed)" />
+                <Area type="monotone" dataKey="Blocked" stroke="#f43f5e" strokeWidth={2} fill="url(#gradBlocked)" />
               </AreaChart>
             </ResponsiveContainer>
           )}
@@ -310,26 +312,26 @@ export function EndpointDetailPage() {
       {topClients.length > 0 && (
         <Card>
           <CardHeader>
-            <span className="text-sm font-medium text-gray-900 dark:text-white">Top clients</span>
+            <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Top clients</span>
           </CardHeader>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100 dark:border-gray-800">
+                <tr className="border-b border-zinc-200/70 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-800/20">
                   {['Client ID', 'Requests', 'Allowed', 'Blocked', 'Block %'].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{h}</th>
+                    <th key={h} className="text-left px-6 py-3 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50 dark:divide-gray-800/60">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
                 {topClients.map((c) => (
-                  <tr key={c.clientId} className="hover:bg-gray-50/60 dark:hover:bg-gray-800/30">
-                    <td className="px-6 py-3 font-mono text-xs text-gray-700 dark:text-gray-300">{c.clientId}</td>
-                    <td className="px-6 py-3 tabular-nums">{c.total.toLocaleString()}</td>
-                    <td className="px-6 py-3 tabular-nums text-green-700 dark:text-green-400">{c.allowed.toLocaleString()}</td>
-                    <td className="px-6 py-3 tabular-nums text-red-600 dark:text-red-400">{c.blocked.toLocaleString()}</td>
-                    <td className="px-6 py-3">
-                      <span className={c.blocked / c.total > 0.2 ? 'text-red-600 dark:text-red-400 font-medium' : 'text-gray-600 dark:text-gray-400'}>
+                  <tr key={c.clientId} className="hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-colors">
+                    <td className="px-6 py-3 font-mono text-xs text-zinc-700 dark:text-zinc-300">{c.clientId}</td>
+                    <td className="px-6 py-3 tabular-nums text-xs">{c.total.toLocaleString()}</td>
+                    <td className="px-6 py-3 tabular-nums text-emerald-600 dark:text-emerald-400 text-xs">{c.allowed.toLocaleString()}</td>
+                    <td className="px-6 py-3 tabular-nums text-rose-600 dark:text-rose-400 text-xs">{c.blocked.toLocaleString()}</td>
+                    <td className="px-6 py-3 text-xs">
+                      <span className={c.blocked / c.total > 0.2 ? 'text-rose-600 dark:text-rose-400 font-medium' : 'text-zinc-600 dark:text-zinc-400'}>
                         {pct(c.blocked, c.total)}
                       </span>
                     </td>

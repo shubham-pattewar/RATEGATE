@@ -54,10 +54,10 @@ function StatCard({ label, value, sub, color = 'gray' }) {
     purple: 'text-purple-600 dark:text-purple-400',
   };
   return (
-    <div className="p-4 rounded-[14px] bg-white/95 dark:bg-[#0e1526]/90 border border-slate-200/80 dark:border-slate-800/80 shadow-xs hover:border-slate-300 dark:hover:border-slate-700/80 transition-colors">
-      <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{label}</p>
-      <p className={`mt-1.5 text-2xl font-bold tracking-tight tabular-nums ${colorMap[color]}`}>{value}</p>
-      {sub && <p className="mt-1 text-xs text-slate-400 dark:text-slate-500 font-medium">{sub}</p>}
+    <div className="p-5 rounded-[14px] bg-white/95 dark:bg-[#0e1526]/90 border border-slate-200/80 dark:border-slate-800/80 shadow-xs hover:border-slate-300 dark:hover:border-slate-700/80 transition-colors">
+      <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{label}</p>
+      <p className={`mt-2 text-3xl font-bold tracking-tight tabular-nums ${colorMap[color]}`}>{value}</p>
+      {sub && <p className="mt-1 text-sm text-slate-400 dark:text-slate-500 font-medium">{sub}</p>}
     </div>
   );
 }
@@ -269,17 +269,17 @@ export function EndpointDetailPage() {
       </div>
 
       {/* Range selector & Section Title */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold text-slate-900 dark:text-white">Traffic Analytics</h2>
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Traffic Analytics</h2>
         <div className="flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800">
           {RANGES.map((r) => (
             <button
               key={r.value}
               onClick={() => setRange(r.value)}
               id={`btn-range-${r.value}`}
-              className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${
+              className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 range === r.value
-                  ? 'bg-purple-600 text-white shadow-xs font-semibold'
+                  ? 'bg-purple-600 text-white shadow-xs font-bold'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -302,10 +302,10 @@ export function EndpointDetailPage() {
 
       {/* Volume chart */}
       <Card className="mb-8">
-        <CardHeader>
-          <span className="text-sm font-semibold text-slate-900 dark:text-white">Request Volume Over Time</span>
+        <CardHeader className="py-4 px-6 border-b border-slate-100 dark:border-slate-800/80">
+          <span className="text-base font-bold text-slate-900 dark:text-white">Request Volume Over Time</span>
         </CardHeader>
-        <CardBody className="pt-2">
+        <CardBody className="pt-3 p-6">
           {statsLoading ? (
             <div className="h-60 flex items-center justify-center text-sm text-slate-400">Loading metrics…</div>
           ) : chartData.length === 0 ? (
@@ -326,11 +326,11 @@ export function EndpointDetailPage() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-slate-100 dark:text-slate-800/60" />
-                <XAxis dataKey="time" tick={{ fontSize: 11, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
+                <XAxis dataKey="time" tick={{ fontSize: 12, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
+                <YAxis allowDecimals={false} tick={{ fontSize: 12, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
                 <Tooltip
                   contentStyle={{
-                    fontSize: 12,
+                    fontSize: 13,
                     borderRadius: 10,
                     border: '1px solid #334155',
                     backgroundColor: '#0f172a',
@@ -339,9 +339,9 @@ export function EndpointDetailPage() {
                   }}
                   itemStyle={{ padding: '2px 0' }}
                 />
-                <Legend wrapperStyle={{ fontSize: 12, paddingTop: 16 }} />
-                <Area type="monotone" dataKey="Allowed" stroke="#10b981" strokeWidth={2} fill="url(#gradAllowed)" />
-                <Area type="monotone" dataKey="Blocked" stroke="#f43f5e" strokeWidth={2} fill="url(#gradBlocked)" />
+                <Legend wrapperStyle={{ fontSize: 13, paddingTop: 16 }} />
+                <Area type="monotone" dataKey="Allowed" stroke="#10b981" strokeWidth={2.5} fill="url(#gradAllowed)" />
+                <Area type="monotone" dataKey="Blocked" stroke="#f43f5e" strokeWidth={2.5} fill="url(#gradBlocked)" />
               </AreaChart>
             </ResponsiveContainer>
           )}
@@ -351,15 +351,15 @@ export function EndpointDetailPage() {
       {/* Top clients */}
       {topClients.length > 0 && (
         <Card>
-          <CardHeader>
-            <span className="text-sm font-semibold text-slate-900 dark:text-white">Top Active Clients</span>
+          <CardHeader className="py-4 px-6 border-b border-slate-100 dark:border-slate-800/80">
+            <span className="text-base font-bold text-slate-900 dark:text-white">Top Active Clients</span>
           </CardHeader>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30">
                   {['Client ID', 'Requests', 'Allowed', 'Blocked', 'Block %'].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <th key={h} className="text-left px-6 py-3.5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                       {h}
                     </th>
                   ))}
@@ -368,16 +368,16 @@ export function EndpointDetailPage() {
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {topClients.map((c) => (
                   <tr key={c.clientId} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-3.5 font-mono text-xs font-medium text-slate-700 dark:text-slate-300">
-                      <span className="bg-slate-100 dark:bg-slate-800/80 px-2 py-1 rounded-md">
+                    <td className="px-6 py-4 font-mono text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      <span className="bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md">
                         {c.clientId}
                       </span>
                     </td>
-                    <td className="px-6 py-3.5 tabular-nums font-semibold text-slate-900 dark:text-white">{c.total.toLocaleString()}</td>
-                    <td className="px-6 py-3.5 tabular-nums text-emerald-600 dark:text-emerald-400 font-medium">{c.allowed.toLocaleString()}</td>
-                    <td className="px-6 py-3.5 tabular-nums text-rose-600 dark:text-rose-400 font-medium">{c.blocked.toLocaleString()}</td>
-                    <td className="px-6 py-3.5">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
+                    <td className="px-6 py-4 tabular-nums text-sm font-bold text-slate-900 dark:text-white">{c.total.toLocaleString()}</td>
+                    <td className="px-6 py-4 tabular-nums text-sm text-emerald-600 dark:text-emerald-400 font-semibold">{c.allowed.toLocaleString()}</td>
+                    <td className="px-6 py-4 tabular-nums text-sm text-rose-600 dark:text-rose-400 font-semibold">{c.blocked.toLocaleString()}</td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
                         c.blocked / c.total > 0.2
                           ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400'
                           : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'

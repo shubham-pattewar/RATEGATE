@@ -61,13 +61,13 @@ export function Layout({ children }) {
 
       {/* Top Header */}
       <header className="sticky top-0 z-30 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-[#080c14]/80 backdrop-blur-md transition-colors duration-200">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex h-14 items-center justify-between">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           {/* Logo & Brand */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-xs group-hover:shadow-[0_0_12px_rgba(147,51,234,0.4)] transition-all">
-              <Zap className="h-4 w-4 fill-white/20" strokeWidth={2.5} />
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-xs group-hover:shadow-[0_0_12px_rgba(147,51,234,0.4)] transition-all">
+              <Zap className="h-4.5 w-4.5 fill-white/20" strokeWidth={2.5} />
             </div>
-            <span className="font-bold tracking-tight text-base text-slate-900 dark:text-white">
+            <span className="font-bold tracking-tight text-lg text-slate-900 dark:text-white">
               RateGate
             </span>
           </Link>
@@ -75,7 +75,7 @@ export function Layout({ children }) {
           {/* Right Navigation items */}
           <div className="flex items-center gap-2 sm:gap-3">
             {user && (
-              <span className="hidden sm:inline-flex items-center text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100/80 dark:bg-[#0f1626] px-2.5 py-1 rounded-lg border border-slate-200/70 dark:border-slate-800">
+              <span className="hidden sm:inline-flex items-center text-sm font-mono text-slate-600 dark:text-slate-300 bg-slate-100/90 dark:bg-[#0f1626] px-3 py-1.5 rounded-lg border border-slate-200/80 dark:border-slate-800">
                 {user.email}
               </span>
             )}
@@ -85,12 +85,12 @@ export function Layout({ children }) {
               onClick={toggleDark}
               aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
               id="btn-toggle-theme"
-              className="text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400"
+              className="text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 p-2"
             >
               {isDark ? (
-                <Sun className="h-4 w-4 text-amber-400 transition-transform hover:rotate-45" />
+                <Sun className="h-4.5 w-4.5 text-amber-400 transition-transform hover:rotate-45" />
               ) : (
-                <Moon className="h-4 w-4 text-slate-600 transition-transform hover:-rotate-12" />
+                <Moon className="h-4.5 w-4.5 text-slate-600 transition-transform hover:-rotate-12" />
               )}
             </Button>
             {user && (
@@ -99,10 +99,10 @@ export function Layout({ children }) {
                 size="sm"
                 onClick={handleLogout}
                 id="btn-logout"
-                className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 text-sm font-medium px-3 py-1.5"
               >
                 <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline text-xs">Sign out</span>
+                <span className="hidden sm:inline text-sm">Sign out</span>
               </Button>
             )}
           </div>

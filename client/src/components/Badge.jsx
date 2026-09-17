@@ -15,7 +15,7 @@ export function Badge({ color = 'gray', className, dot, children }) {
   return (
     <span
       className={clsx(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium tracking-tight',
+        'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold tracking-normal',
         colors[color] || colors.gray,
         className,
       )}
@@ -23,7 +23,7 @@ export function Badge({ color = 'gray', className, dot, children }) {
       {showDot && (
         <span
           className={clsx(
-            'w-1.5 h-1.5 rounded-full mr-1.5 shrink-0',
+            'w-2 h-2 rounded-full mr-1.5 shrink-0',
             color === 'green' ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]' : 'bg-current opacity-70',
           )}
         />

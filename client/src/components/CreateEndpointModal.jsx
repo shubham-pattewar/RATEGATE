@@ -78,8 +78,8 @@ export function CreateEndpointModal({ onClose }) {
               <Network className="h-4 w-4 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-white">Register New Endpoint</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Configure rate-limiting rule and target URL</p>
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">Register New Endpoint</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Configure rate-limiting rule and target URL</p>
             </div>
           </div>
           <button
@@ -120,7 +120,7 @@ export function CreateEndpointModal({ onClose }) {
               error={fieldErrors['rateLimit.limit']}
             />
             <div className="space-y-1.5">
-              <label htmlFor="ep-window" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <label htmlFor="ep-window" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Window duration
               </label>
               <select
@@ -139,9 +139,9 @@ export function CreateEndpointModal({ onClose }) {
             </div>
           </div>
 
-          <div className="rounded-xl p-3 bg-purple-50/50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/30">
-            <p className="text-xs text-purple-900/80 dark:text-purple-300/90 leading-relaxed">
-              Algorithm: <span className="font-semibold">Sliding window log</span> — tracks individual request timestamps in Redis for exact rate control per client API key.
+          <div className="rounded-xl p-3.5 bg-purple-50/50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/30">
+            <p className="text-sm text-purple-900/90 dark:text-purple-300/90 leading-relaxed">
+              Algorithm: <span className="font-bold">Sliding window log</span> — tracks individual request timestamps in Redis for exact rate control per client API key.
             </p>
           </div>
 

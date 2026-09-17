@@ -315,12 +315,32 @@ Time-series log data feeding the dashboard analytics charts.
 
 ### Rate-Limited Reverse Proxy
 
-Forward any HTTP method (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`) with arbitrary subpaths and queries:
+Forward any HTTP method (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`) with arbitrary subpaths and queries through your RateGate gateway:
 
+#### 🐧 Linux / macOS (Bash)
 ```bash
 curl -i -X GET \
   -H "X-API-Key: rg_xxxxxxxxxxxxxxxx" \
   https://your-domain.com/proxy/<ENDPOINT_ID>/v1/users?active=true
+```
+
+#### 🪟 Windows (PowerShell)
+
+> [!IMPORTANT]
+> **Windows PowerShell Users**: In PowerShell, `curl` is a built-in alias for `Invoke-WebRequest` (which handles parameters differently). You must use **`curl.exe`** to invoke the actual curl binary:
+
+```powershell
+curl.exe -i -H "X-API-Key: rg_MUNPtIytnZnLzTeTMuAJm2ByqsUX33p__rO7C_cpkXw" "https://rategate-api.onrender.com/proxy/6aac1cc0438c9e5498b7efbd"
+```
+
+#### 🔁 Simulating Rate-Limiting Burst in PowerShell
+
+Test atomic quota exhaustion and watch the transition from `HTTP 200` to `HTTP 429` in real time:
+
+```powershell
+1..10 | ForEach-Object {
+  curl.exe -s -o nul -w "Request $_: Status %{http_code}`n" -H "X-API-Key: rg_MUNPtIytnZnLzTeTMuAJm2ByqsUX33p__rO7C_cpkXw" "https://rategate-api.onrender.com/proxy/6aac1cc0438c9e5498b7efbd"
+}
 ```
 
 #### Allowed Response (HTTP 200)

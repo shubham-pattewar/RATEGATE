@@ -33,7 +33,7 @@ export async function getEndpointStats(userId, endpointId, range = '24h') {
   // Confirm the endpoint exists and belongs to this user (throws 404/403 otherwise).
   await getEndpoint(userId, endpointId);
 
-  const { unit, lookbackMs } = RANGE_CONFIG[range];
+  const { unit, bucketMs, lookbackMs } = RANGE_CONFIG[range];
   const since = new Date(Date.now() - lookbackMs);
   const oid = new mongoose.Types.ObjectId(endpointId);
 

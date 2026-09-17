@@ -229,7 +229,7 @@ export function EndpointDetailPage() {
           <p className="text-xs text-gray-500 dark:text-gray-400">
             Proxy URL:{' '}
             <code className="font-mono text-xs text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700">
-              {window.location.origin}/proxy/{id}
+              {import.meta.env.VITE_API_URL || window.location.origin}/proxy/{id}
             </code>
           </p>
         </CardBody>

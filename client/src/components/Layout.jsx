@@ -14,7 +14,6 @@ export function Layout({ children }) {
   });
 
   useEffect(() => {
-    // Sync state with DOM on mount
     const observer = new MutationObserver(() => {
       setIsDark(document.documentElement.classList.contains('dark'));
     });
@@ -38,20 +37,45 @@ export function Layout({ children }) {
   const handleLogout = () => { logout(); navigate('/login', { replace: true }); };
 
   return (
-    <div className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950 transition-colors duration-200">
-      {/* Nav */}
-      <header className="border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md sticky top-0 z-10 transition-colors duration-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-14 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5 font-semibold text-zinc-900 dark:text-zinc-100 group">
-            <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
-              <Zap className="h-4 w-4 fill-emerald-500/20" strokeWidth={2.5} />
+    <div className="min-h-screen flex flex-col bg-[#fafbfe] dark:bg-[#080c14] text-slate-900 dark:text-slate-100 relative overflow-x-hidden transition-colors duration-200">
+      {/* Atmospheric Background Gradients */}
+      {/* Light Mode Soft Atmospheric Glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[380px] bg-gradient-to-b from-purple-200/25 via-indigo-100/20 to-transparent blur-[100px] rounded-full -z-10 dark:hidden"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-40 right-[-10%] w-[500px] h-[350px] bg-blue-100/20 blur-[90px] rounded-full -z-10 dark:hidden"
+      />
+
+      {/* Dark Mode Gradient Accent Glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none hidden dark:block absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[420px] bg-gradient-to-b from-purple-900/20 via-indigo-950/20 to-transparent blur-[120px] rounded-full -z-10"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none hidden dark:block absolute top-20 right-[-5%] w-[450px] h-[350px] bg-purple-900/15 blur-[100px] rounded-full -z-10"
+      />
+
+      {/* Top Header */}
+      <header className="sticky top-0 z-30 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-[#080c14]/80 backdrop-blur-md transition-colors duration-200">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex h-14 items-center justify-between">
+          {/* Logo & Brand */}
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-xs group-hover:shadow-[0_0_12px_rgba(147,51,234,0.4)] transition-all">
+              <Zap className="h-4 w-4 fill-white/20" strokeWidth={2.5} />
             </div>
-            <span className="tracking-tight text-base font-semibold">RateGate</span>
+            <span className="font-bold tracking-tight text-base text-slate-900 dark:text-white">
+              RateGate
+            </span>
           </Link>
 
+          {/* Right Navigation items */}
           <div className="flex items-center gap-2 sm:gap-3">
             {user && (
-              <span className="hidden sm:block text-xs font-mono text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/60 px-2.5 py-1 rounded-md border border-zinc-200/60 dark:border-zinc-700/50">
+              <span className="hidden sm:inline-flex items-center text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100/80 dark:bg-[#0f1626] px-2.5 py-1 rounded-lg border border-slate-200/70 dark:border-slate-800">
                 {user.email}
               </span>
             )}
@@ -61,16 +85,22 @@ export function Layout({ children }) {
               onClick={toggleDark}
               aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
               id="btn-toggle-theme"
-              className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white"
+              className="text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400"
             >
               {isDark ? (
                 <Sun className="h-4 w-4 text-amber-400 transition-transform hover:rotate-45" />
               ) : (
-                <Moon className="h-4 w-4 text-zinc-600 transition-transform hover:-rotate-12" />
+                <Moon className="h-4 w-4 text-slate-600 transition-transform hover:-rotate-12" />
               )}
             </Button>
             {user && (
-              <Button variant="ghost" size="sm" onClick={handleLogout} id="btn-logout" className="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                id="btn-logout"
+                className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+              >
                 <LogOut className="h-4 w-4" />
                 <span className="hidden sm:inline text-xs">Sign out</span>
               </Button>
@@ -79,7 +109,8 @@ export function Layout({ children }) {
         </div>
       </header>
 
-      <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content Area */}
+      <main className="flex-1 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
         {children}
       </main>
     </div>

@@ -3,9 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
-  BarChart, Bar, Cell,
 } from 'recharts';
-import { ArrowLeft, Settings, Save, X } from 'lucide-react';
+import { ArrowLeft, Settings, Save, X, ExternalLink, Activity } from 'lucide-react';
 import { endpointsApi } from '../api/resources.js';
 import { Layout } from '../components/Layout.jsx';
 import { Card, CardHeader, CardBody } from '../components/Card.jsx';
@@ -48,17 +47,18 @@ const RANGES = [
 // ---------------------------------------------------------------------------
 function StatCard({ label, value, sub, color = 'gray' }) {
   const colorMap = {
-    gray:  'text-zinc-900 dark:text-zinc-100',
-    green: 'text-emerald-600 dark:text-emerald-400',
-    red:   'text-rose-600 dark:text-rose-400',
-    blue:  'text-zinc-900 dark:text-zinc-100',
+    gray:   'text-slate-900 dark:text-white',
+    green:  'text-emerald-600 dark:text-emerald-400',
+    red:    'text-rose-600 dark:text-rose-400',
+    blue:   'text-blue-600 dark:text-blue-400',
+    purple: 'text-purple-600 dark:text-purple-400',
   };
   return (
-    <Card className="p-4">
-      <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">{label}</p>
-      <p className={`mt-1.5 text-2xl font-semibold tabular-nums tracking-tight ${colorMap[color]}`}>{value}</p>
-      {sub && <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">{sub}</p>}
-    </Card>
+    <div className="p-4 rounded-[14px] bg-white/95 dark:bg-[#0e1526]/90 border border-slate-200/80 dark:border-slate-800/80 shadow-xs hover:border-slate-300 dark:hover:border-slate-700/80 transition-colors">
+      <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{label}</p>
+      <p className={`mt-1.5 text-2xl font-bold tracking-tight tabular-nums ${colorMap[color]}`}>{value}</p>
+      {sub && <p className="mt-1 text-xs text-slate-400 dark:text-slate-500 font-medium">{sub}</p>}
+    </div>
   );
 }
 
@@ -94,27 +94,33 @@ function SettingsPanel({ endpoint, onClose }) {
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   return (
-    <Card className="mt-6 border-zinc-200/90 dark:border-zinc-800">
-      <CardHeader>
-        <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-2">
-          <Settings className="h-4 w-4 text-zinc-400" /> Endpoint configuration
+    <Card className="mt-6 mb-8 border-purple-200/50 dark:border-purple-900/40">
+      <CardHeader className="border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30">
+        <span className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+          <Settings className="h-4 w-4 text-purple-600 dark:text-purple-400" /> Endpoint Configuration
         </span>
-        <button onClick={onClose} className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors" id="btn-close-settings">
+        <button
+          onClick={onClose}
+          className="rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+          id="btn-close-settings"
+        >
           <X className="h-4 w-4" />
         </button>
       </CardHeader>
-      <CardBody className="space-y-4">
+      <CardBody className="space-y-4 p-5 sm:p-6">
         <div className="grid sm:grid-cols-2 gap-4">
           <Input id="set-name" label="Name" value={form.name} onChange={set('name')} />
           <Input id="set-url" label="Target URL" value={form.targetUrl} onChange={set('targetUrl')} />
           <Input id="set-limit" label="Max requests" type="number" min="1" value={form.limit} onChange={set('limit')} />
           <div className="space-y-1.5">
-            <label htmlFor="set-window" className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">Window (ms)</label>
+            <label htmlFor="set-window" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Window duration
+            </label>
             <select
               id="set-window"
               value={form.windowMs}
               onChange={set('windowMs')}
-              className="block w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400"
+              className="block w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0b101c] text-slate-900 dark:text-slate-100 px-3.5 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
             >
               <option value="1000">1 second</option>
               <option value="10000">10 seconds</option>
@@ -126,23 +132,23 @@ function SettingsPanel({ endpoint, onClose }) {
           </div>
         </div>
 
-        <label className="flex items-center gap-2.5 cursor-pointer select-none">
+        <label className="flex items-center gap-2.5 cursor-pointer py-1">
           <input
             id="set-active"
             type="checkbox"
             checked={form.isActive}
             onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked }))}
-            className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-700 text-emerald-600 focus:ring-emerald-500/20"
+            className="h-4 w-4 rounded border-slate-300 dark:border-slate-700 text-purple-600 focus:ring-purple-500 dark:bg-slate-900"
           />
-          <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Endpoint active</span>
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Active endpoint (allows proxy traffic)</span>
         </label>
 
-        {error && <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">{error}</p>}
+        {error && <p className="text-sm text-rose-600 dark:text-rose-400 font-medium">{error}</p>}
 
-        <div className="flex gap-3 pt-1">
+        <div className="flex gap-3 pt-2">
           <Button variant="secondary" onClick={onClose} id="btn-cancel-settings">Cancel</Button>
           <Button onClick={() => mutation.mutate()} disabled={mutation.isPending} id="btn-save-settings">
-            <Save className="h-4 w-4" />
+            <Save className="h-4 w-4 mr-1.5" />
             {mutation.isPending ? 'Saving…' : 'Save changes'}
           </Button>
         </div>
@@ -174,7 +180,10 @@ export function EndpointDetailPage() {
   if (epLoading) {
     return (
       <Layout>
-        <div className="text-sm text-gray-400 py-12 text-center">Loading…</div>
+        <div className="text-sm text-slate-400 py-16 text-center font-medium flex items-center justify-center gap-2">
+          <div className="h-4 w-4 rounded-full border-2 border-purple-500 border-t-transparent animate-spin" />
+          Loading endpoint metrics…
+        </div>
       </Layout>
     );
   }
@@ -182,7 +191,7 @@ export function EndpointDetailPage() {
   if (!endpoint) {
     return (
       <Layout>
-        <div className="text-sm text-red-500 py-12 text-center">Endpoint not found.</div>
+        <div className="text-sm text-rose-500 py-16 text-center font-medium">Endpoint not found.</div>
       </Layout>
     );
   }
@@ -199,60 +208,79 @@ export function EndpointDetailPage() {
     Errors: row.errors,
   }));
 
+  const proxyUrl = `${import.meta.env.VITE_API_URL || window.location.origin}/proxy/${id}`;
+
   return (
     <Layout>
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 mb-6">
-        <Link to="/" className="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center gap-1">
+      <div className="flex items-center gap-2 mb-6 text-sm">
+        <Link to="/" className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex items-center gap-1 font-medium transition-colors">
           <ArrowLeft className="h-3.5 w-3.5" /> Endpoints
         </Link>
-        <span className="text-zinc-300 dark:text-zinc-600">/</span>
-        <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">{endpoint.name}</span>
-        <Badge color={endpoint.isActive ? 'green' : 'gray'} className="ml-1">{endpoint.isActive ? 'Active' : 'Inactive'}</Badge>
+        <span className="text-slate-300 dark:text-slate-700">/</span>
+        <span className="font-semibold text-slate-900 dark:text-white truncate max-w-xs">{endpoint.name}</span>
+        <Badge color={endpoint.isActive ? 'green' : 'gray'} showDot={endpoint.isActive} className="ml-1">
+          {endpoint.isActive ? 'Active' : 'Inactive'}
+        </Badge>
       </div>
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-start gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-8">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{endpoint.name}</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono mt-0.5 truncate">{endpoint.targetUrl}</p>
-          <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">
-            {endpoint.rateLimit.limit} req / {windowLabel(endpoint.rateLimit.windowMs)} · Sliding window
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{endpoint.name}</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1 flex items-center gap-1 truncate">
+            <ExternalLink className="h-3 w-3 inline text-slate-400 shrink-0" />
+            {endpoint.targetUrl}
           </p>
+          <div className="flex items-center gap-2 mt-2">
+            <Badge color="purple">Sliding Window Log</Badge>
+            <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
+              {endpoint.rateLimit.limit} req / {windowLabel(endpoint.rateLimit.windowMs)}
+            </span>
+          </div>
         </div>
         <Button variant="secondary" size="sm" onClick={() => setShowSettings((v) => !v)} id="btn-settings">
-          <Settings className="h-4 w-4" />
+          <Settings className="h-4 w-4 mr-1.5" />
           Settings
         </Button>
       </div>
 
       {showSettings && <SettingsPanel endpoint={endpoint} onClose={() => setShowSettings(false)} />}
 
-      {/* Proxy URL */}
-      <Card className="mb-6 bg-zinc-50 dark:bg-zinc-900/60 border-zinc-200/90 dark:border-zinc-800">
-        <CardBody className="py-3">
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            Proxy Gateway URL:{' '}
-            <code className="font-mono text-xs text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-700/80 shadow-2xs select-all">
-              {import.meta.env.VITE_API_URL || window.location.origin}/proxy/{id}
+      {/* Proxy URL Banner */}
+      <div className="mb-8 p-4 rounded-[14px] bg-white/80 dark:bg-[#0e1526]/80 border border-slate-200/80 dark:border-slate-800/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="h-7 w-7 rounded-lg bg-purple-50 dark:bg-purple-950/50 flex items-center justify-center shrink-0 border border-purple-200/50 dark:border-purple-900/40">
+            <Activity className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Live Proxy Route:</p>
+            <code className="font-mono text-xs font-semibold text-purple-700 dark:text-purple-300 truncate block">
+              {proxyUrl}
             </code>
-          </p>
-        </CardBody>
-      </Card>
+          </div>
+        </div>
+        <button
+          onClick={() => navigator.clipboard.writeText(proxyUrl)}
+          className="text-xs font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 self-start sm:self-auto shrink-0 transition-colors"
+        >
+          Copy route
+        </button>
+      </div>
 
-      {/* Range selector */}
+      {/* Range selector & Section Title */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">Traffic analytics</h2>
-        <div className="flex rounded-lg bg-zinc-100 dark:bg-zinc-800/80 p-0.5 border border-zinc-200/60 dark:border-zinc-700/60">
+        <h2 className="text-base font-semibold text-slate-900 dark:text-white">Traffic Analytics</h2>
+        <div className="flex rounded-xl p-0.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800">
           {RANGES.map((r) => (
             <button
               key={r.value}
               onClick={() => setRange(r.value)}
               id={`btn-range-${r.value}`}
-              className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+              className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${
                 range === r.value
-                  ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs'
-                  : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                  ? 'bg-purple-600 text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               {r.label}
@@ -263,46 +291,55 @@ export function EndpointDetailPage() {
 
       {/* Summary stats */}
       {s && (
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
-          <StatCard label="Total" value={s.total.toLocaleString()} />
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5 mb-8">
+          <StatCard label="Total Requests" value={s.total.toLocaleString()} />
           <StatCard label="Allowed" value={s.allowed.toLocaleString()} color="green" sub={pct(s.allowed, s.total)} />
           <StatCard label="Blocked" value={s.blocked.toLocaleString()} color="red" sub={pct(s.blocked, s.total)} />
-          <StatCard label="Block rate" value={`${(s.blockRate * 100).toFixed(1)}%`} color={s.blockRate > 0.1 ? 'red' : 'gray'} />
-          <StatCard label="Avg latency" value={s.avgLatencyMs != null ? `${s.avgLatencyMs}ms` : '—'} color="blue" />
+          <StatCard label="Block Rate" value={`${(s.blockRate * 100).toFixed(1)}%`} color={s.blockRate > 0.1 ? 'red' : 'gray'} />
+          <StatCard label="Avg Latency" value={s.avgLatencyMs != null ? `${s.avgLatencyMs}ms` : '—'} color="purple" />
         </div>
       )}
 
       {/* Volume chart */}
-      <Card className="mb-6">
+      <Card className="mb-8">
         <CardHeader>
-          <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Request volume</span>
+          <span className="text-sm font-semibold text-slate-900 dark:text-white">Request Volume Over Time</span>
         </CardHeader>
-        <CardBody>
+        <CardBody className="pt-2">
           {statsLoading ? (
-            <div className="h-48 flex items-center justify-center text-xs text-zinc-400">Loading metrics…</div>
+            <div className="h-60 flex items-center justify-center text-sm text-slate-400">Loading metrics…</div>
           ) : chartData.length === 0 ? (
-            <div className="h-48 flex items-center justify-center text-xs text-zinc-400">No traffic recorded for this window.</div>
+            <div className="h-60 flex items-center justify-center text-sm text-slate-400 font-medium">
+              No traffic recorded for this time period.
+            </div>
           ) : (
-            <ResponsiveContainer width="100%" height={240}>
-              <AreaChart data={chartData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+            <ResponsiveContainer width="100%" height={260}>
+              <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="gradAllowed" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
                     <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="gradBlocked" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.3} />
+                    <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.25} />
                     <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-zinc-100 dark:text-zinc-800/80" />
-                <XAxis dataKey="time" tick={{ fontSize: 11 }} tickLine={false} axisLine={false} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11 }} tickLine={false} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-slate-100 dark:text-slate-800/60" />
+                <XAxis dataKey="time" tick={{ fontSize: 11, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
+                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#94a3b8' }} tickLine={false} axisLine={false} />
                 <Tooltip
-                  contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #3f3f46', backgroundColor: '#18181b', color: '#f4f4f5' }}
-                  itemStyle={{ padding: '1px 0' }}
+                  contentStyle={{
+                    fontSize: 12,
+                    borderRadius: 10,
+                    border: '1px solid #334155',
+                    backgroundColor: '#0f172a',
+                    color: '#f8fafc',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)',
+                  }}
+                  itemStyle={{ padding: '2px 0' }}
                 />
-                <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                <Legend wrapperStyle={{ fontSize: 12, paddingTop: 16 }} />
                 <Area type="monotone" dataKey="Allowed" stroke="#10b981" strokeWidth={2} fill="url(#gradAllowed)" />
                 <Area type="monotone" dataKey="Blocked" stroke="#f43f5e" strokeWidth={2} fill="url(#gradBlocked)" />
               </AreaChart>
@@ -315,26 +352,36 @@ export function EndpointDetailPage() {
       {topClients.length > 0 && (
         <Card>
           <CardHeader>
-            <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Top clients</span>
+            <span className="text-sm font-semibold text-slate-900 dark:text-white">Top Active Clients</span>
           </CardHeader>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-zinc-200/70 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-800/20">
+                <tr className="border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30">
                   {['Client ID', 'Requests', 'Allowed', 'Blocked', 'Block %'].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">{h}</th>
+                    <th key={h} className="text-left px-6 py-3 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                      {h}
+                    </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {topClients.map((c) => (
-                  <tr key={c.clientId} className="hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-colors">
-                    <td className="px-6 py-3 font-mono text-xs text-zinc-700 dark:text-zinc-300">{c.clientId}</td>
-                    <td className="px-6 py-3 tabular-nums text-xs">{c.total.toLocaleString()}</td>
-                    <td className="px-6 py-3 tabular-nums text-emerald-600 dark:text-emerald-400 text-xs">{c.allowed.toLocaleString()}</td>
-                    <td className="px-6 py-3 tabular-nums text-rose-600 dark:text-rose-400 text-xs">{c.blocked.toLocaleString()}</td>
-                    <td className="px-6 py-3 text-xs">
-                      <span className={c.blocked / c.total > 0.2 ? 'text-rose-600 dark:text-rose-400 font-medium' : 'text-zinc-600 dark:text-zinc-400'}>
+                  <tr key={c.clientId} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/30 transition-colors">
+                    <td className="px-6 py-3.5 font-mono text-xs font-medium text-slate-700 dark:text-slate-300">
+                      <span className="bg-slate-100 dark:bg-slate-800/80 px-2 py-1 rounded-md">
+                        {c.clientId}
+                      </span>
+                    </td>
+                    <td className="px-6 py-3.5 tabular-nums font-semibold text-slate-900 dark:text-white">{c.total.toLocaleString()}</td>
+                    <td className="px-6 py-3.5 tabular-nums text-emerald-600 dark:text-emerald-400 font-medium">{c.allowed.toLocaleString()}</td>
+                    <td className="px-6 py-3.5 tabular-nums text-rose-600 dark:text-rose-400 font-medium">{c.blocked.toLocaleString()}</td>
+                    <td className="px-6 py-3.5">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
+                        c.blocked / c.total > 0.2
+                          ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400'
+                          : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                      }`}>
                         {pct(c.blocked, c.total)}
                       </span>
                     </td>

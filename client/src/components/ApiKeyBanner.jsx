@@ -19,41 +19,48 @@ export function ApiKeyBanner() {
   };
 
   return (
-    <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/5 dark:border-amber-500/20 dark:bg-amber-950/20 p-4.5 shadow-xs">
+    <div className="mb-6 rounded-[14px] border border-amber-300/80 bg-amber-50/90 dark:border-amber-900/50 dark:bg-amber-950/30 p-4.5 shadow-xs backdrop-blur-xs">
       <div className="flex items-start gap-3">
         <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-amber-950 dark:text-amber-200">
-            Your API key — copy it now, it won&apos;t be shown again.
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-900 dark:text-amber-300">
+            Important: Save your new API key
+          </p>
+          <p className="text-xs text-amber-800/90 dark:text-amber-300/80 mt-0.5">
+            This secret key is displayed only once. Copy and store it securely.
           </p>
           <div className="mt-2.5 flex items-center gap-2">
-            <code className="flex-1 rounded-lg bg-amber-500/10 dark:bg-zinc-900/90 border border-amber-500/20 dark:border-zinc-800 px-3 py-1.5 font-mono text-xs text-amber-950 dark:text-amber-200 break-all select-all">
+            <code className="flex-1 rounded-xl bg-white/90 dark:bg-[#0b101c] border border-amber-200/80 dark:border-amber-900/40 px-3.5 py-2 font-mono text-xs font-semibold text-amber-900 dark:text-amber-200 break-all select-all shadow-2xs">
               {apiKey}
             </code>
             <button
               onClick={copy}
-              className="shrink-0 rounded-lg p-2 bg-amber-500/10 hover:bg-amber-500/20 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-amber-500/20 dark:border-zinc-700 transition-colors cursor-pointer"
+              className="shrink-0 rounded-xl p-2 bg-white dark:bg-[#0e1526] border border-amber-200/80 dark:border-amber-900/40 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-800 dark:text-amber-300 transition-colors shadow-2xs flex items-center gap-1 text-xs font-semibold px-3"
               aria-label="Copy API key"
               id="btn-copy-api-key"
             >
               {copied ? (
-                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <>
+                  <Check className="h-3.5 w-3.5 text-emerald-600" /> Copied
+                </>
               ) : (
-                <Copy className="h-4 w-4 text-amber-800 dark:text-amber-300" />
+                <>
+                  <Copy className="h-3.5 w-3.5" /> Copy
+                </>
               )}
             </button>
           </div>
-          <p className="mt-2 text-xs text-amber-800/80 dark:text-amber-400/80">
-            Pass this key in the <code className="font-mono font-semibold px-1 rounded bg-amber-500/10 dark:bg-zinc-800">X-API-Key</code> header with every proxy request.
+          <p className="mt-2 text-xs text-amber-800/80 dark:text-amber-400 font-medium">
+            Send this key in the <code className="font-mono bg-amber-100/60 dark:bg-amber-950/60 px-1 py-0.5 rounded text-amber-900 dark:text-amber-200">X-API-Key</code> header for proxy requests.
           </p>
         </div>
         <button
           onClick={dismissApiKey}
-          className="shrink-0 rounded-lg p-1.5 hover:bg-amber-500/15 dark:hover:bg-zinc-800 text-amber-700 dark:text-amber-400 transition-colors"
+          className="shrink-0 rounded-lg p-1.5 hover:bg-amber-200/50 dark:hover:bg-amber-900/40 transition-colors"
           aria-label="Dismiss"
           id="btn-dismiss-api-key"
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4 text-amber-700 dark:text-amber-400" />
         </button>
       </div>
     </div>

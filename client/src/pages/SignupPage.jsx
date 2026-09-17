@@ -46,58 +46,62 @@ export function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4 py-12 transition-colors">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#fafbfe] dark:bg-[#080c14] px-4 relative overflow-hidden text-slate-900 dark:text-slate-100 selection:bg-purple-500/20">
+      {/* Soft atmospheric gradient blobs */}
+      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-purple-500/15 via-indigo-500/10 to-blue-500/10 dark:from-purple-600/20 dark:via-indigo-600/15 dark:to-transparent rounded-full blur-3xl -z-10" />
+      <div className="pointer-events-none absolute -bottom-32 left-1/4 w-[400px] h-[300px] bg-blue-500/5 dark:bg-purple-900/15 rounded-full blur-3xl -z-10" />
+
       <div className="w-full max-w-sm">
-        {/* Logo & Heading */}
-        <div className="flex flex-col items-center mb-6 text-center">
-          <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-xs mb-3.5">
-            <Zap className="h-5 w-5 text-emerald-500 fill-emerald-500/20" strokeWidth={2.2} />
+        {/* Logo & Header */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 shadow-[0_0_20px_rgba(147,51,234,0.35)] mb-3.5">
+            <Zap className="h-5 w-5 text-white" strokeWidth={2.5} />
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Create an account</h1>
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Deploy and protect your APIs with sub-ms rate limits</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Create an account</h1>
+          <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">Start protecting your APIs in seconds</p>
         </div>
 
-        {/* Card Form */}
-        <div className="bg-white dark:bg-zinc-900/90 border border-zinc-200/90 dark:border-zinc-800/80 rounded-2xl p-6 shadow-xs">
+        {/* Form Card */}
+        <div className="p-7 rounded-[18px] bg-white/90 dark:bg-[#0e1526]/90 border border-slate-200/80 dark:border-slate-800/80 shadow-xl dark:shadow-2xl backdrop-blur-md">
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <Input
               id="signup-email"
-              label="Work email"
+              label="Email address"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="developer@example.com"
+              placeholder="you@example.com"
               autoComplete="email"
               error={errors.email}
               required
             />
             <Input
               id="signup-password"
-              label="Password (min 8 characters)"
+              label="Password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="At least 8 characters"
               autoComplete="new-password"
               error={errors.password}
               required
             />
 
             {serverError && (
-              <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-xs text-rose-600 dark:text-rose-400" role="alert">
+              <p className="text-xs font-medium text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 p-2.5 rounded-lg border border-rose-200/60 dark:border-rose-900/40" role="alert">
                 {serverError}
-              </div>
+              </p>
             )}
 
-            <Button type="submit" className="w-full mt-1" disabled={loading} id="btn-signup">
+            <Button type="submit" className="w-full mt-2" disabled={loading} id="btn-signup">
               {loading ? 'Creating account…' : 'Create account'}
             </Button>
           </form>
         </div>
 
-        <p className="mt-5 text-center text-xs text-zinc-500 dark:text-zinc-400">
+        <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
           Already have an account?{' '}
-          <Link to="/login" className="text-zinc-900 dark:text-zinc-100 underline underline-offset-4 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors">
+          <Link to="/login" className="text-purple-600 dark:text-purple-400 hover:text-purple-500 font-semibold transition-colors">
             Sign in
           </Link>
         </p>

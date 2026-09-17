@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, ExternalLink, Trash2, Activity, ChevronRight, Key, RotateCcw } from 'lucide-react';
-import { endpointsApi, authApi } from '../api/resources.js';
+import { Plus, Trash2, Activity, ChevronRight, Key, RotateCcw, Terminal } from 'lucide-react';
+import { endpointsApi } from '../api/resources.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { Layout } from '../components/Layout.jsx';
 import { Card, CardHeader, CardBody } from '../components/Card.jsx';
@@ -42,38 +42,49 @@ export function DashboardPage() {
     try { await regenerateApiKey(); } finally { setRegenerating(false); }
   };
 
+  const proxyBaseUrl = import.meta.env.VITE_API_URL || window.location.origin;
+
   return (
     <Layout>
       <ApiKeyBanner />
 
-      {/* Page header */}
+      {/* Top Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Endpoints</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Endpoints
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             {data?.length ?? 0} registered endpoint{data?.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <Button onClick={() => setShowCreate(true)} id="btn-new-endpoint">
+        <Button onClick={() => setShowCreate(true)} id="btn-new-endpoint" className="self-start sm:self-auto">
           <Plus className="h-4 w-4" />
           New endpoint
         </Button>
       </div>
 
-      {/* Endpoints table */}
+      {/* Endpoints Table Card */}
       {isLoading ? (
-        <div className="text-xs text-zinc-400 py-16 text-center">Loading endpoints…</div>
+        <Card className="py-20 flex flex-col items-center justify-center text-center">
+          <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mb-3" />
+          <p className="text-xs text-slate-500 dark:text-slate-400">Loading endpoints…</p>
+        </Card>
       ) : error ? (
-        <div className="text-xs text-rose-500 py-16 text-center">Failed to load endpoints.</div>
+        <Card className="py-16 text-center">
+          <p className="text-xs text-rose-500">Failed to load endpoints. Please refresh the page.</p>
+        </Card>
       ) : data?.length === 0 ? (
         <Card>
           <CardBody className="py-16 flex flex-col items-center gap-4 text-center">
-            <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200/80 dark:border-zinc-700/60 flex items-center justify-center">
-              <Activity className="h-5 w-5 text-zinc-400" />
+            <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200/60 dark:border-purple-800/50 flex items-center justify-center text-purple-600 dark:text-purple-400">
+              <Activity className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">No endpoints configured</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Register an upstream API endpoint to enforce sliding-window rate limiting.</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">No endpoints configured yet</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
+                Register your first API endpoint to start protecting your downstream services with sliding-window limits.
+              </p>
             </div>
             <Button onClick={() => setShowCreate(true)} id="btn-first-endpoint">
               <Plus className="h-4 w-4" /> Register endpoint
@@ -81,49 +92,86 @@ export function DashboardPage() {
           </CardBody>
         </Card>
       ) : (
-        <Card>
+        <Card className="overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-zinc-200/70 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-800/20">
-                  {['Name', 'Target URL', 'Rate limit', 'Algorithm', 'Status', ''].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider whitespace-nowrap">
-                      {h}
-                    </th>
-                  ))}
+                <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0c1220]/60">
+                  <th className="py-3 px-6 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Name</th>
+                  <th className="py-3 px-6 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Target URL</th>
+                  <th className="py-3 px-6 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Rate Limit</th>
+                  <th className="py-3 px-6 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Algorithm</th>
+                  <th className="py-3 px-6 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+                  <th className="py-3 px-6 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {data.map((ep) => (
-                  <tr key={ep.id} className="hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-colors">
-                    <td className="px-6 py-4 font-medium text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{ep.name}</td>
-                    <td className="px-6 py-4 max-w-xs">
-                      <span className="inline-flex items-center gap-1 text-zinc-500 dark:text-zinc-400 font-mono text-xs truncate block">
+                  <tr
+                    key={ep.id}
+                    className="hover:bg-purple-50/20 dark:hover:bg-purple-950/15 transition-colors duration-150 group"
+                  >
+                    <td className="py-4 px-6 text-sm font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                      {ep.name}
+                    </td>
+                    <td className="py-4 px-6 max-w-xs">
+                      <span className="font-mono text-xs text-slate-500 dark:text-slate-400 truncate block">
                         {ep.targetUrl}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-zinc-600 dark:text-zinc-300 text-xs">
+                    <td className="py-4 px-6 text-xs text-slate-600 dark:text-slate-300 font-medium whitespace-nowrap">
                       {ep.rateLimit.limit} req / {windowLabel(ep.rateLimit.windowMs)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <Badge color="gray">Sliding window</Badge>
+                    <td className="py-4 px-6 whitespace-nowrap">
+                      <Badge color="purple">Sliding window</Badge>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <Badge color={ep.isActive ? 'green' : 'gray'}>{ep.isActive ? 'Active' : 'Inactive'}</Badge>
+                    <td className="py-4 px-6 whitespace-nowrap">
+                      <Badge color={ep.isActive ? 'green' : 'gray'}>
+                        {ep.isActive ? 'Active' : 'Inactive'}
+                      </Badge>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-1 justify-end">
-                        <Button variant="ghost" size="sm" onClick={() => navigate(`/endpoints/${ep.id}`)} id={`btn-view-${ep.id}`}>
+                    <td className="py-4 px-6 whitespace-nowrap text-right">
+                      <div className="flex items-center gap-1.5 justify-end">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => navigate(`/endpoints/${ep.id}`)}
+                          aria-label={`View endpoint ${ep.name}`}
+                          id={`btn-view-${ep.id}`}
+                          className="hover:text-purple-600 dark:hover:text-purple-400"
+                        >
                           <ChevronRight className="h-4 w-4" />
                         </Button>
                         {deleteConfirm === ep.id ? (
-                          <>
-                            <Button variant="danger" size="sm" onClick={() => deleteMutation.mutate(ep.id)} disabled={deleteMutation.isPending} id={`btn-confirm-delete-${ep.id}`}>Confirm</Button>
-                            <Button variant="ghost" size="sm" onClick={() => setDeleteConfirm(null)} id={`btn-cancel-delete-${ep.id}`}>Cancel</Button>
-                          </>
+                          <div className="inline-flex items-center gap-1">
+                            <Button
+                              variant="danger"
+                              size="sm"
+                              onClick={() => deleteMutation.mutate(ep.id)}
+                              disabled={deleteMutation.isPending}
+                              id={`btn-confirm-delete-${ep.id}`}
+                            >
+                              Confirm
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setDeleteConfirm(null)}
+                              id={`btn-cancel-delete-${ep.id}`}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
                         ) : (
-                          <Button variant="ghost" size="sm" onClick={() => setDeleteConfirm(ep.id)} id={`btn-delete-${ep.id}`}>
-                            <Trash2 className="h-4 w-4 text-zinc-400 hover:text-rose-500" />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setDeleteConfirm(ep.id)}
+                            aria-label={`Delete endpoint ${ep.name}`}
+                            id={`btn-delete-${ep.id}`}
+                            className="hover:text-rose-500"
+                          >
+                            <Trash2 className="h-4 w-4 text-slate-400 hover:text-rose-500" />
                           </Button>
                         )}
                       </div>
@@ -136,50 +184,70 @@ export function DashboardPage() {
         </Card>
       )}
 
-      {/* Account section */}
-      <div className="mt-6">
+      {/* API Key & Proxy URL Sections: Side-by-Side on Desktop */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        {/* API Key Card */}
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Key className="h-4 w-4 text-zinc-400" />
-              <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Account API Key</span>
+              <Key className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+              <span className="text-xs font-semibold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                API Key
+              </span>
             </div>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                  Active key prefix: <code className="font-mono text-zinc-900 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700/60">{user?.apiKeyPrefix}…</code>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  Your key prefix:{' '}
+                  <code className="font-mono text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded border border-purple-200/70 dark:border-purple-800/50">
+                    {user?.apiKeyPrefix}…
+                  </code>
                 </p>
-                <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">
-                  Issued {user?.apiKeyCreatedAt ? new Date(user.apiKeyCreatedAt).toLocaleDateString() : '—'}
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                  Created {user?.apiKeyCreatedAt ? new Date(user.apiKeyCreatedAt).toLocaleDateString() : '—'}
                 </p>
               </div>
-              <Button variant="secondary" size="sm" onClick={handleRegenerate} disabled={regenerating} id="btn-regenerate-key">
+              <Button
+                variant="outline-purple"
+                size="sm"
+                onClick={handleRegenerate}
+                disabled={regenerating}
+                id="btn-regenerate-key"
+                className="shrink-0 self-start sm:self-auto"
+              >
                 <RotateCcw className="h-3.5 w-3.5" />
-                {regenerating ? 'Rotating…' : 'Rotate API key'}
+                {regenerating ? 'Regenerating…' : 'Regenerate key'}
               </Button>
             </div>
           </CardBody>
         </Card>
-      </div>
 
-      {/* Proxy URL info */}
-      {data?.length > 0 && (
-        <div className="mt-4">
-          <Card>
-            <CardBody>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                <strong className="text-zinc-900 dark:text-zinc-100">Gateway pattern:</strong>{' '}
-                <code className="font-mono text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">
-                  {import.meta.env.VITE_API_URL || window.location.origin}/proxy/:endpointId
+        {/* Proxy URL Card */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Terminal className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+              <span className="text-xs font-semibold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+                Proxy URL Pattern
+              </span>
+            </div>
+          </CardHeader>
+          <CardBody>
+            <div className="space-y-2">
+              <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-[#0b101c] border border-slate-200/80 dark:border-slate-800 overflow-x-auto shadow-2xs">
+                <code className="font-mono text-xs text-slate-800 dark:text-slate-200 select-all block whitespace-nowrap">
+                  {proxyBaseUrl}/proxy/:endpointId
                 </code>
-                {' '}<span className="text-xs text-zinc-500 dark:text-zinc-400">— Pass your API key in the <code className="font-mono">X-API-Key</code> header.</span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Send your API key in the <code className="font-mono font-semibold text-slate-700 dark:text-slate-300">X-API-Key</code> header with every request.
               </p>
-            </CardBody>
-          </Card>
-        </div>
-      )}
+            </div>
+          </CardBody>
+        </Card>
+      </div>
 
       {showCreate && <CreateEndpointModal onClose={() => setShowCreate(false)} />}
     </Layout>

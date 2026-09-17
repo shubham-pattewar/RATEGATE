@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand palette — cool indigo-blue */
+  --color-brand-50:  oklch(97.0% 0.01 255);
+  --color-brand-100: oklch(93.5% 0.03 255);
+  --color-brand-200: oklch(87.0% 0.07 255);
+  --color-brand-300: oklch(78.0% 0.12 255);
+  --color-brand-400: oklch(66.0% 0.16 255);
+  --color-brand-500: oklch(54.0% 0.20 255);
+  --color-brand-600: oklch(47.0% 0.19 255);
+  --color-brand-700: oklch(39.0% 0.17 255);
+  --color-brand-800: oklch(31.0% 0.13 255);
+  --color-brand-900: oklch(23.0% 0.09 255);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-sans);
+}

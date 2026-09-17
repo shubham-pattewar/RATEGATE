@@ -25,9 +25,9 @@ const VALID_RANGES = Object.keys(RANGE_CONFIG);
  * @param {string} endpointId     The endpoint to query
  * @param {string} [range='24h']  One of '1h', '6h', '24h', '7d'
  */
-export async function getEndpointStats(userId, endpointId, range = '24h') {
+export async function getEndpointStats(userId, endpointId, range = '6h') {
   if (!VALID_RANGES.includes(range)) {
-    range = '24h';
+    range = '6h';
   }
 
   // Confirm the endpoint exists and belongs to this user (throws 404/403 otherwise).

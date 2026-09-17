@@ -11,7 +11,7 @@ export const statsRouter = Router();
 statsRouter.use(requireJwt);
 
 const rangeSchema = z.object({
-  range: z.enum(VALID_RANGES).default('24h'),
+  range: z.enum(VALID_RANGES).default('6h'),
 });
 
 // GET /api/endpoints/:id/stats?range=24h

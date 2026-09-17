@@ -20,7 +20,7 @@ function pct(a, b) {
   return `${Math.round((a / b) * 100)}%`;
 }
 
-function fmtTimestamp(ts, range = '24h') {
+function fmtTimestamp(ts, range = '6h') {
   const d = new Date(ts);
   if (range === '7d') {
     return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
@@ -162,7 +162,7 @@ function SettingsPanel({ endpoint, onClose }) {
 // ---------------------------------------------------------------------------
 export function EndpointDetailPage() {
   const { id } = useParams();
-  const [range, setRange] = useState('24h');
+  const [range, setRange] = useState('6h');
   const [showSettings, setShowSettings] = useState(false);
 
   const { data: endpoint, isLoading: epLoading } = useQuery({

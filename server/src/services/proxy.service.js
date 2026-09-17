@@ -13,7 +13,7 @@
  * slidingWindow.lua (Redis) or MemoryRateLimitStore.js (fallback).
  */
 
-import { fetch, ProxyAgent } from 'undici'; // undici ships with Node ≥18
+import { fetch } from 'undici'; // undici ships with Node ≥18
 import { getEndpoint } from './endpoint.service.js';
 import { RequestLog } from '../models/RequestLog.js';
 import { ApiError } from '../utils/ApiError.js';
@@ -186,7 +186,6 @@ export async function handleProxy(req, res, { rateLimitStore }) {
   if (upstreamRes.body) {
     const reader = upstreamRes.body.getReader();
     try {
-      // eslint-disable-next-line no-constant-condition
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;

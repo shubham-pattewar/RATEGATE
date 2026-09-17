@@ -35,7 +35,7 @@ function startEchoServer() {
 // Suite setup
 // ---------------------------------------------------------------------------
 let agent, rateLimitStore, echoServer, echoUrl;
-let token, apiKey, userId, endpointId;
+let apiKey, userId, endpointId;
 
 beforeAll(async () => {
   await connectTestDb();
@@ -57,7 +57,6 @@ afterAll(async () => {
 /** Signs up, creates a test endpoint with a tight rate limit, returns identifiers. */
 async function setup({ limit = 3, windowMs = 60_000 } = {}) {
   const body = await signupViaHttp(agent, 'proxy@example.com');
-  token = body.token;
   apiKey = body.apiKey;
 
   // We need the raw userId to create the endpoint directly (faster than HTTP).

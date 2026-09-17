@@ -148,7 +148,7 @@ export async function getEndpointStats(userId, endpointId, range = '24h') {
           allowed: summary.allowed,
           blocked: summary.blocked,
           blockRate: summary.total > 0 ? Number((summary.blocked / summary.total).toFixed(4)) : 0,
-          avgLatencyMs: summary.avgLatencyMs != null ? Math.round(summary.avgLatencyMs) : null,
+          avgLatencyMs: summary.avgLatencyMs !== null ? Math.round(summary.avgLatencyMs) : null,
         }
       : { total: 0, allowed: 0, blocked: 0, blockRate: 0, avgLatencyMs: null },
     timeseries,

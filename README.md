@@ -16,6 +16,13 @@
   <strong>High-performance, multi-tenant reverse proxy and rate-limiting gateway with sub-millisecond atomic sliding-window enforcement, live analytics, and a self-service developer dashboard.</strong>
 </p>
 
+> [!TIP]
+> ### ⚡ Test the Live Reverse Proxy Gateway (Windows PowerShell)
+> ```powershell
+> curl.exe -i -H "X-API-Key: rg_MUNPtIytnZnLzTeTMuAJm2ByqsUX33p__rO7C_cpkXw" "https://rategate-api.onrender.com/proxy/6aac1cc0438c9e5498b7efbd"
+> ```
+> *(Note: Windows PowerShell requires `curl.exe` instead of `curl` to invoke the genuine cURL executable rather than the `Invoke-WebRequest` alias).*
+
 ---
 
 ## 📸 Application Showcase & Live UI
@@ -317,30 +324,34 @@ Time-series log data feeding the dashboard analytics charts.
 
 Forward any HTTP method (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`) with arbitrary subpaths and queries through your RateGate gateway:
 
-#### 🐧 Linux / macOS (Bash)
-```bash
-curl -i -X GET \
-  -H "X-API-Key: rg_xxxxxxxxxxxxxxxx" \
-  https://your-domain.com/proxy/<ENDPOINT_ID>/v1/users?active=true
-```
-
-#### 🪟 Windows (PowerShell)
+---
 
 > [!IMPORTANT]
-> **Windows PowerShell Users**: In PowerShell, `curl` is a built-in alias for `Invoke-WebRequest` (which handles parameters differently). You must use **`curl.exe`** to invoke the actual curl binary:
+> ### 🪟 Windows PowerShell — Live Proxy Testing
+>
+> In Windows PowerShell, the command `curl` is a built-in alias for `Invoke-WebRequest`, which breaks `-i` and `-H` flag behavior. **You must always type `curl.exe`** to run the native cURL binary:
+>
+> ```powershell
+> curl.exe -i -H "X-API-Key: rg_MUNPtIytnZnLzTeTMuAJm2ByqsUX33p__rO7C_cpkXw" "https://rategate-api.onrender.com/proxy/6aac1cc0438c9e5498b7efbd"
+> ```
 
-```powershell
-curl.exe -i -H "X-API-Key: rg_MUNPtIytnZnLzTeTMuAJm2ByqsUX33p__rO7C_cpkXw" "https://rategate-api.onrender.com/proxy/6aac1cc0438c9e5498b7efbd"
-```
+---
 
-#### 🔁 Simulating Rate-Limiting Burst in PowerShell
+#### 🔁 Simulating Rate-Limiting Bursts in PowerShell
 
-Test atomic quota exhaustion and watch the transition from `HTTP 200` to `HTTP 429` in real time:
+Test atomic quota exhaustion and watch requests transition from `HTTP 200 OK` to `HTTP 429 Too Many Requests` in real time:
 
 ```powershell
 1..10 | ForEach-Object {
   curl.exe -s -o nul -w "Request $_: Status %{http_code}`n" -H "X-API-Key: rg_MUNPtIytnZnLzTeTMuAJm2ByqsUX33p__rO7C_cpkXw" "https://rategate-api.onrender.com/proxy/6aac1cc0438c9e5498b7efbd"
 }
+```
+
+#### 🐧 Linux / macOS (Bash)
+```bash
+curl -i -X GET \
+  -H "X-API-Key: rg_xxxxxxxxxxxxxxxx" \
+  https://your-domain.com/proxy/<ENDPOINT_ID>/v1/users?active=true
 ```
 
 #### Allowed Response (HTTP 200)

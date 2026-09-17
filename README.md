@@ -18,6 +18,48 @@
 
 ---
 
+## 📸 Application Showcase & Live UI
+
+<div align="center">
+  <img src="docs/images/dashboard-overview.png" alt="RateGate Developer Dashboard" width="100%" />
+  <p><em>Developer Dashboard — manage multi-tenant upstream endpoints, generate API keys, and copy live proxy routes.</em></p>
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="docs/images/traffic-analytics-dark.png" alt="RateGate Real-Time Traffic Analytics" width="100%" />
+  <p><em>Real-Time Traffic Analytics — request volume timeseries (Allowed vs Blocked), average latency, and per-client audit table.</em></p>
+</div>
+
+<br/>
+
+<table align="center" width="100%">
+  <tr>
+    <td align="center" width="50%">
+      <strong>⚡ Instant Endpoint Registration</strong><br/><br/>
+      <img src="docs/images/endpoint-registration-modal.png" alt="Endpoint Registration Modal" width="100%" />
+      <br/>
+      <em>Configure sliding-window quotas with customizable limits and windows in seconds.</em>
+    </td>
+    <td align="center" width="50%">
+      <strong>☀️ Light / Dark Mode Flexibility</strong><br/><br/>
+      <img src="docs/images/endpoint-detail-light.png" alt="Endpoint Detail in Light Mode" width="100%" />
+      <br/>
+      <em>Polished light and dark themes with tactile micro-interactions and copy route feedback.</em>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+<div align="center">
+  <img src="docs/images/endpoint-detail-dark.png" alt="Endpoint Detail in Dark Mode" width="100%" />
+  <p><em>Endpoint Detail (Dark Mode) — Live Proxy Route banner with animated copy button, sliding window log rules, and live metric tracking.</em></p>
+</div>
+
+---
+
 ## 🏛️ System Architecture
 
 RateGate sits transparently between your API consumers and your upstream services. It decouples rate limiting and traffic management from upstream application code, shielding backends from traffic spikes, noisy neighbors, and DDoS attempts.

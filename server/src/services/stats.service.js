@@ -133,11 +133,36 @@ export async function getEndpointStats(userId, endpointId, range = '24h') {
     },
   ]);
 
-  const [timeseries, topClients, [summary]] = await Promise.all([
+  const [rawTimeseries, topClients, [summary]] = await Promise.all([
     timeseriesPromise,
     topClientsPromise,
     summaryPromise,
   ]);
+
+  // -------------------------------------------------------------------------
+  // Zero-fill missing buckets so charts render continuous timeline curves
+  // across the entire time window instead of isolated points.
+  // -------------------------------------------------------------------------
+  const bucketMap = new Map();
+  for (const row of rawTimeseries) {
+    const key = new Date(row.timestamp).getTime();
+    bucketMap.set(key, row);
+  }
+
+  const timeseries = [];
+  const nowMs = Date.now();
+  let cur = Math.floor(since.getTime() / bucketMs) * bucketMs;
+  while (cur <= nowMs) {
+    const item = bucketMap.get(cur);
+    timeseries.push({
+      timestamp: new Date(cur).toISOString(),
+      total: item?.total ?? 0,
+      allowed: item?.allowed ?? 0,
+      blocked: item?.blocked ?? 0,
+      errors: item?.errors ?? 0,
+    });
+    cur += bucketMs;
+  }
 
   return {
     range,

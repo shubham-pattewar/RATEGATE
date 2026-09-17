@@ -21,8 +21,11 @@ function pct(a, b) {
   return `${Math.round((a / b) * 100)}%`;
 }
 
-function fmtTimestamp(ts) {
+function fmtTimestamp(ts, range = '24h') {
   const d = new Date(ts);
+  if (range === '7d') {
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
   return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
@@ -190,7 +193,7 @@ export function EndpointDetailPage() {
 
   // Format timeseries for recharts
   const chartData = timeseries.map((row) => ({
-    time: fmtTimestamp(row.timestamp),
+    time: fmtTimestamp(row.timestamp, range),
     Allowed: row.allowed,
     Blocked: row.blocked,
     Errors: row.errors,

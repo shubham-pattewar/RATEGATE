@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, Activity, ChevronRight, Key, RotateCcw, Terminal } from 'lucide-react';
+import { Plus, Trash2, Activity, ChevronRight, Key, RotateCcw, Terminal, Copy, Check } from 'lucide-react';
+import { clsx } from 'clsx';
 import { endpointsApi } from '../api/resources.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { Layout } from '../components/Layout.jsx';
@@ -43,6 +44,29 @@ export function DashboardPage() {
   };
 
   const proxyBaseUrl = import.meta.env.VITE_API_URL || window.location.origin;
+  const proxyPatternUrl = `${proxyBaseUrl}/proxy/:endpointId`;
+  const [copiedPattern, setCopiedPattern] = useState(false);
+  const [copiedEndpointId, setCopiedEndpointId] = useState(null);
+
+  const handleCopyPattern = async () => {
+    try {
+      await navigator.clipboard.writeText(proxyPatternUrl);
+      setCopiedPattern(true);
+      setTimeout(() => setCopiedPattern(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy proxy URL pattern', err);
+    }
+  };
+
+  const handleCopyEndpointRoute = async (epId) => {
+    try {
+      await navigator.clipboard.writeText(`${proxyBaseUrl}/proxy/${epId}`);
+      setCopiedEndpointId(epId);
+      setTimeout(() => setCopiedEndpointId(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy route to clipboard', err);
+    }
+  };
 
   return (
     <Layout>
@@ -132,6 +156,30 @@ export function DashboardPage() {
                     </td>
                     <td className="py-4.5 px-6 whitespace-nowrap text-right">
                       <div className="flex items-center gap-1.5 justify-end">
+                        <button
+                          onClick={() => handleCopyEndpointRoute(ep.id)}
+                          aria-label={`Copy live proxy route for ${ep.name}`}
+                          title="Copy live proxy route"
+                          id={`btn-copy-route-${ep.id}`}
+                          className={clsx(
+                            'relative overflow-hidden p-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 cursor-pointer select-none transition-all duration-300',
+                            copiedEndpointId === ep.id
+                              ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/50 text-emerald-700 dark:text-emerald-300 animate-copy-pulse shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                              : 'bg-transparent border-transparent hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:border-purple-200/60 dark:hover:border-purple-800/60 text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 active:scale-95 group'
+                          )}
+                        >
+                          {copiedEndpointId === ep.id && (
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-emerald-400/25 to-transparent animate-sheen pointer-events-none" />
+                          )}
+                          {copiedEndpointId === ep.id ? (
+                            <>
+                              <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 animate-checkmark" />
+                              <span className="animate-copy-text text-xs">Copied!</span>
+                            </>
+                          ) : (
+                            <Copy className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+                          )}
+                        </button>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -236,10 +284,36 @@ export function DashboardPage() {
           </CardHeader>
           <CardBody className="p-6">
             <div className="space-y-2.5">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#0b101c] border border-slate-200/80 dark:border-slate-800 overflow-x-auto shadow-2xs">
-                <code className="font-mono text-sm text-slate-800 dark:text-slate-200 select-all block whitespace-nowrap">
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#0b101c] border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3 shadow-2xs">
+                <code className="font-mono text-sm text-slate-800 dark:text-slate-200 select-all block whitespace-nowrap truncate">
                   {proxyBaseUrl}/proxy/:endpointId
                 </code>
+                <button
+                  onClick={handleCopyPattern}
+                  id="btn-copy-proxy-pattern"
+                  aria-label={copiedPattern ? 'Pattern copied' : 'Copy proxy URL pattern'}
+                  className={clsx(
+                    'relative overflow-hidden text-xs font-semibold px-3 py-1.5 rounded-lg border flex items-center gap-1.5 cursor-pointer select-none shrink-0 transition-all duration-300',
+                    copiedPattern
+                      ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/50 text-emerald-700 dark:text-emerald-300 animate-copy-pulse shadow-[0_0_14px_rgba(16,185,129,0.35)]'
+                      : 'bg-white dark:bg-[#0e1526] border-slate-200/80 dark:border-slate-700 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:border-purple-300 dark:hover:border-purple-700 active:scale-95 group'
+                  )}
+                >
+                  {copiedPattern && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-emerald-400/25 to-transparent animate-sheen pointer-events-none" />
+                  )}
+                  {copiedPattern ? (
+                    <>
+                      <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 animate-checkmark" />
+                      <span className="animate-copy-text font-bold">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400 transition-transform duration-200 group-hover:scale-110" />
+                      <span>Copy</span>
+                    </>
+                  )}
+                </button>
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 Send your API key in the <code className="font-mono font-semibold text-sm text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60">X-API-Key</code> header with every request.

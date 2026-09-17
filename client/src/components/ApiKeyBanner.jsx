@@ -4,6 +4,7 @@
  */
 import { useState } from 'react';
 import { Copy, Check, X, AlertTriangle } from 'lucide-react';
+import { clsx } from 'clsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export function ApiKeyBanner() {
@@ -35,17 +36,27 @@ export function ApiKeyBanner() {
             </code>
             <button
               onClick={copy}
-              className="shrink-0 rounded-xl p-2 bg-white dark:bg-[#0e1526] border border-amber-200/80 dark:border-amber-900/40 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-800 dark:text-amber-300 transition-colors shadow-2xs flex items-center gap-1 text-xs font-semibold px-3"
+              className={clsx(
+                "relative overflow-hidden shrink-0 rounded-xl px-3.5 py-2 border transition-all duration-300 shadow-2xs flex items-center gap-1.5 text-xs font-semibold select-none cursor-pointer",
+                copied
+                  ? "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/50 text-emerald-700 dark:text-emerald-300 animate-copy-pulse shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+                  : "bg-white dark:bg-[#0e1526] border-amber-200/80 dark:border-amber-900/40 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-800 dark:text-amber-300 active:scale-95 group"
+              )}
               aria-label="Copy API key"
               id="btn-copy-api-key"
             >
+              {copied && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-emerald-400/25 to-transparent animate-sheen pointer-events-none" />
+              )}
               {copied ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-emerald-600" /> Copied
+                  <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 animate-checkmark" />
+                  <span className="animate-copy-text font-bold">Copied!</span>
                 </>
               ) : (
                 <>
-                  <Copy className="h-3.5 w-3.5" /> Copy
+                  <Copy className="h-3.5 w-3.5 transition-transform duration-200 group-hover:scale-110" />
+                  <span>Copy</span>
                 </>
               )}
             </button>

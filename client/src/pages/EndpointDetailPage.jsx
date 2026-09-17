@@ -4,7 +4,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
-import { ArrowLeft, Settings, Save, X, ExternalLink, Activity } from 'lucide-react';
+import { ArrowLeft, Settings, Save, X, ExternalLink, Activity, Copy, Check } from 'lucide-react';
+import { clsx } from 'clsx';
 import { endpointsApi } from '../api/resources.js';
 import { Layout } from '../components/Layout.jsx';
 import { Card, CardHeader, CardBody } from '../components/Card.jsx';
@@ -164,6 +165,17 @@ export function EndpointDetailPage() {
   const { id } = useParams();
   const [range, setRange] = useState('6h');
   const [showSettings, setShowSettings] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyRoute = async () => {
+    try {
+      await navigator.clipboard.writeText(proxyUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy route to clipboard', err);
+    }
+  };
 
   const { data: endpoint, isLoading: epLoading } = useQuery({
     queryKey: ['endpoint', id],
@@ -261,10 +273,31 @@ export function EndpointDetailPage() {
           </div>
         </div>
         <button
-          onClick={() => navigator.clipboard.writeText(proxyUrl)}
-          className="text-sm font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 self-start sm:self-auto shrink-0 transition-colors px-3 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200/60 dark:border-purple-800/50 flex items-center gap-1.5"
+          onClick={handleCopyRoute}
+          id="btn-copy-route"
+          aria-label={copied ? 'Route copied to clipboard' : 'Copy live proxy route'}
+          className={clsx(
+            'relative overflow-hidden text-sm font-semibold self-start sm:self-auto shrink-0 px-4 py-2 rounded-xl border flex items-center gap-2 cursor-pointer select-none',
+            'transition-all duration-300 active:scale-95',
+            copied
+              ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/50 text-emerald-700 dark:text-emerald-300 animate-copy-pulse shadow-[0_0_20px_rgba(16,185,129,0.35)]'
+              : 'bg-purple-50 dark:bg-purple-950/40 border-purple-200/60 dark:border-purple-800/50 text-purple-700 dark:text-purple-300 hover:bg-purple-100/80 dark:hover:bg-purple-900/50 hover:border-purple-300 dark:hover:border-purple-700 shadow-2xs group'
+          )}
         >
-          Copy route
+          {copied && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-emerald-400/25 to-transparent animate-sheen pointer-events-none" />
+          )}
+          {copied ? (
+            <>
+              <Check className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400 animate-checkmark" />
+              <span className="animate-copy-text font-bold text-emerald-700 dark:text-emerald-300">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy className="h-4.5 w-4.5 text-purple-600 dark:text-purple-400 transition-transform duration-200 group-hover:scale-110 group-active:rotate-[-8deg]" />
+              <span>Copy route</span>
+            </>
+          )}
         </button>
       </div>
 

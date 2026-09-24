@@ -54,8 +54,8 @@ export function SignupPage() {
       <div className="w-full max-w-sm">
         {/* Logo & Header */}
         <div className="flex flex-col items-center mb-8">
-          <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 shadow-[0_0_20px_rgba(147,51,234,0.35)] mb-3.5">
-            <Zap className="h-5 w-5 text-white" strokeWidth={2.5} />
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 shadow-[0_0_20px_rgba(147,51,234,0.35)] mb-3.5 p-1 overflow-hidden">
+            <img src="/ratelimitlogo.png" alt="RateGate" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Create an account</h1>
           <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">Start protecting your APIs in seconds</p>
